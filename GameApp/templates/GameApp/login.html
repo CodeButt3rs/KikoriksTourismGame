@@ -1,0 +1,15 @@
+{% extends 'GameApp/base.html' %}
+{% load static %}
+{% block content %}
+<div class="pt-3 text-center">
+  <h1>Страница авторизации</h1>
+  <h6>Для игры требуется авторизация!</h6>
+  <div class="d-flex justify-content-center">
+    <form action="{% url 'GameAppLogin' %}" method="post">
+      {% csrf_token %}
+      {{form}}
+      <input type="submit" value="Авторизоваться">
+    </form>
+  </div>
+</div>
+{% endblock content %}

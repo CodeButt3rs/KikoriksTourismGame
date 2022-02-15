@@ -1,0 +1,37 @@
+{% extends 'GameApp/base.html' %}
+{% block content %}
+{% load static %}
+<div class="pt-3 text-center">
+  <h1>Привет, Мир!</h1>
+  <h6>Так начинается эта веб-страница</h6>
+  <p>Пришёл ты сюда не просто так. Внизу есть карточки, на которых отображена информация. Найди нужную тебе и перейди по ней.</p>
+  <div class="row d-flex justify-content-center">
+    <!-- Cards start -->
+    <div class="card ms-lg-4 me-lg-4 mt-sm-3 mt-3" style="width: 18rem;">
+      <img src="{% static 'GameApp/icons/GithubIcon.png' %}" class="card-img-top img-fluid mt-3" alt="GitHubIcon">
+      <div class="card-body">
+        <h5 class="card-title">Что это такое?</h5>
+        <p class="card-text">Нажав на кнопку, ты сможешь узнать что это за сайт и зачем он создан, кнопка ведёт на GitHub проекта</p>
+        <a href="https://github.com/CodeButt3rs/KikoriksTourismGame" class="btn btn-primary" target="_blank">Перейти по ссылке</a>
+      </div>
+    </div>
+    <div class="card ms-lg-4 me-lg-4 mt-sm-3 mt-3" style="width: 18rem;">
+      <img src="{% static 'GameApp/icons/VKIcon.svg' %}" class="card-img-top img-fluid mt-3" alt="VKIcon">
+      <div class="card-body">
+        <h5 class="card-title">Хочу написать автору</h5>
+        <p class="card-text">Без проблем! Нажми на кнопку и ты отправишься на страничку ВК автора этого проекта</p>
+        <a href="https://vk.com/mrfinlo" class="btn btn-primary" target="_blank">Перейти по ссылке</a>
+      </div>
+    </div>
+    <div class="card ms-lg-4 me-lg-4 mt-sm-3 mt-3" style="width: 18rem;">
+      <img src="{% static 'GameApp/icons/PinKikorikIcon.png' %}" class="card-img-top img-fluid mt-3" alt="PinKikorikIcon" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Я пришёл играть</h5>
+        <p class="card-text">Что-ж... Нажимай на кнопку, логинься и ожидай начала игры - ведущий объявит о начале</p>
+        <a href="{% url 'GameAppLogin' %}" class="btn btn-primary">Перейти по ссылке</a>
+      </div>
+    </div>
+    <!-- Cards end -->
+  </div>
+</div>
+{% endblock content %}

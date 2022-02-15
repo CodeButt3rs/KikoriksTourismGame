@@ -10,6 +10,15 @@ class KikorikAdmin(admin.ModelAdmin):
 
 class AttractionsAdmin(admin.ModelAdmin):
     list_display = ['name', 'gameDay', 'recreationK', 'healthK', 'cultureK', 'sportK', 'eventsK', 'fatigue']
+
+class GameCycleAdmin(admin.ModelAdmin):
+    list_display = ['name', 'gameDays', 'currentGameDay', 'get_amount_of_kikoriks', 'gameDate']
+
+    def get_amount_of_kikoriks(self, obj):
+        return obj.usersInGame.count()
+
+    get_amount_of_kikoriks.short_description = 'Пользователей в игре'
+
 admin.site.register(Kikorik, KikorikAdmin)
 admin.site.register(Attractions, AttractionsAdmin)
-admin.site.register(GameCycle)
+admin.site.register(GameCycle, GameCycleAdmin)
