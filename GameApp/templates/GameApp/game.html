@@ -9,29 +9,30 @@
 {% block content %}
 <div class="pt-3 text-center">
   {% if isKikorikAttached is False %}
-  <h1>За вами не закреплён Смешарик!</h1>
-  <h3>Если вы считаете, что это не так, то скажите это ведущему</h3>
+    <h1>За вами не закреплён Смешарик!</h1>
+    <h3>Если вы считаете, что это не так, то скажите это ведущему</h3>
   {% elif currentGameCycle.isActive == False and currentGameCycle.isEnded != True %}
-  <h1>GameID - {{currentGameCycle.pk}}</h1>
-  <h3>Игра ещё не началась или закончилась...</h3>
-  <h5>Ожидайте указаний ведущего. Изучите карточки туристских объектов и характеристики Смешарика. Вскрывайте конверты по дням согласно указаниям ведущего</h5>
+    <h1>GameID - {{currentGameCycle.pk}}</h1>
+    <h3>Игра ещё не началась или закончилась...</h3>
+    <h5>Ожидайте указаний ведущего. Изучите карточки туристских объектов и характеристики Смешарика. Вскрывайте конверты по дням согласно указаниям ведущего</h5>
   {% elif currentGameCycle.isEnded == True%}
-  <h1>GameID - {{currentGameCycle.pk}}</h1>
-  <h3>Игра закончилась!</h3>
-  <h5>Благодарю вас за участие в данном проекте</h5>
+    <h1>GameID - {{currentGameCycle.pk}}</h1>
+    <h3>Игра закончилась!</h3>
+    <h5>Благодарю вас за участие в данном проекте</h5>
   {% elif currentGameCycle.isPaused == True and currentGameCycle.isActive == True %}
-  <h1>GameID - {{currentGameCycle.pk}}</h1>
-  <h3>Игра на паузе</h3>
-  <h5>Ожидайте что скажет ведущий и слушайте его внимательно</h5>
+    <h1>GameID - {{currentGameCycle.pk}}</h1>
+    <h3>Игра на паузе</h3>
+    <h5>Ожидайте что скажет ведущий и слушайте его внимательно</h5>
   {% else %}
-  <h6>Игра идёт! Ваш Смешарик - {{kikorik.name}}</h6>
-  </div>
-    <div class="row">
-      <!--Карточка смешарика-->
-      {% include 'GameApp/_inc/_kikorikCards.html' %}
-      <!----> 
+    <h6>Игра идёт! Ваш Смешарик - {{kikorik.name}}</h6>
     </div>
-  </div>
+      <div class="row">
+        <!--Карточка смешарика-->
+        {% include 'GameApp/_inc/_kikorikCards.html' %}
+        {% getAttractionsCard %}
+        <!----> 
+      </div>
+    </div>
   {% endif %}
 </div>
 {% endblock content %}
