@@ -1,9 +1,11 @@
 # import
 
 # from ... import ...
+from pyexpat import model
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.forms import ValidationError
 
 # Create your models here.
 
@@ -19,6 +21,7 @@ class Kikorik(models.Model):
     cultureK = models.FloatField("Культ.-познават. (C)")
     sportK = models.FloatField("Спортивный (S)")
     eventsK = models.FloatField("Событийный (E)")
+    ecoK = models.FloatField("Экологический (Eco)", null=True)
     fatigue = models.FloatField("Усталость (F)")
     isTurnMade = models.BooleanField("Персонаж сходил?", default=False)
 
@@ -32,15 +35,23 @@ class Kikorik(models.Model):
     def get_absolute_url(self):
         return reverse("kikorik_detail", kwargs={"pk": self.pk})
 
+    def save(self, *args, **kwargs) -> None:
+        k = abs(self.recreationK) + abs(self.healthK) + abs(self.cultureK) + abs(self.sportK) + abs(self.eventsK) + abs(self.ecoK)
+        if k > 2.5:
+            return ValidationError("Значение вышло за пределы коэффициента Кати Кадочкиной")
+        return super(Kikorik, self).save(*args, **kwargs)
+
 class Attractions(models.Model):
 
     name = models.CharField("Тур. объект (A)", max_length=50)
     icon = models.ImageField("Фотография", null=True)
+    isForRelax = models.BooleanField("Создан для отдыха?", default=False)
     recreationK = models.FloatField("Рекреация (R)")
     healthK = models.FloatField("Лечебн.-оздоров. (H)")
     cultureK = models.FloatField("Культ.-познават. (C)")
     sportK = models.FloatField("Спортивный (S)")
     eventsK = models.FloatField("Событийный (E)")
+    ecoK = models.FloatField("Экологический (Eco)", null=True)
     fatigue = models.FloatField("Усталость (F)")
     gameDay = models.IntegerField("Игровой день (GDay)", default=1)
 
@@ -54,7 +65,34 @@ class Attractions(models.Model):
     def get_absolute_url(self):
         return reverse("attraction_detail", kwargs={"pk": self.pk})
 
+    def save(self, *args, **kwargs) -> None:
+        k = self.recreationK + self.healthK + self.cultureK + self.sportK + self.eventsK + self.ecoK
+        if k > 2.5 or k < 0:
+            return ValidationError
+        self.fatigue = round(0.30 * (k/2.5), 2)
+        if self.isForRelax:
+            self.fatigue = round(-1.75 * self.fatigue, 2)
+        return super(Attractions, self).save(*args, **kwargs)
+
 class GameCycle(models.Model):
+
+    MODS = (
+        ('NONE', 'Нету'),
+        ('Бафы', (
+                ('SUNNY', 'Солнечно (+10% HK)'),
+                ('SECRET', 'В планах реализовать')
+            )
+        ),
+        ('Дебафы', (
+                ('RAIN', 'Дождь (-10% HK)'),
+                ('SUN', 'Жара (+10% F)'),
+                ('WIND', 'Ветренно (-15% HK и -15% F)'),
+                ('POISON', 'Отравление (+30% F)'),
+                ('HURRICANE', 'Ураган (-30% HK)'),
+                ('SECRET', 'В планах реализовать')
+            )
+        )
+    )
 
     name = models.CharField("Название", max_length=50, null=True)
     isActive = models.BooleanField("Игра активна?", default=False)
@@ -64,6 +102,33 @@ class GameCycle(models.Model):
     gameDays = models.IntegerField("Кол-во игровых дней")
     currentGameDay = models.IntegerField("Текущий игровой день")
     usersInGame = models.ManyToManyField(User, verbose_name="Пользователи", related_name='usersInGame')
+    # gameMod = models.CharField("Модификатор", choices=MODS, null=True, blank=True)
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.name)
+
+class MakeTurn(models.Model):
+
+    user = models.ForeignKey(User, blank=True, on_delete=models.CASCADE)
+    gameDay = models.IntegerField("Игровой день", blank=True, null=True)
+    attractionOne = models.ForeignKey(Attractions, verbose_name="Достопримечательность №1", related_name="AttractionOne", on_delete=models.CASCADE)
+    attractionTwo = models.ForeignKey(Attractions, verbose_name="Достопримечательность №2", related_name="AttractionTwo", on_delete=models.CASCADE)
+    attractionThree = models.ForeignKey(Attractions, verbose_name="Достопримечательность №3", related_name="AttractionThree", on_delete=models.CASCADE)
+    attractionFour = models.ForeignKey(Attractions, verbose_name="Достопримечательность №4", related_name="AttractionFour", on_delete=models.CASCADE)
+    attractionFive = models.ForeignKey(Attractions, verbose_name="Достопримечательность №5", related_name="AttractionFive", on_delete=models.CASCADE)
+
+    def __str__(self):
+        string = f"Ход №{self.gameDay} игрока {self.user}"
+        return string
+    
+class MadeTurn(MakeTurn):
+    fatigueOne = models.FloatField("Усталость №1")
+    fatigueTwo = models.FloatField("Усталость №2")
+    fatigueThree = models.FloatField("Усталость №3")
+    fatigueFour = models.FloatField("Усталость №4")
+    fatigueFive = models.FloatField("Усталость №5")
+    happinesOne = models.FloatField("HK №1")
+    happinesTwo = models.FloatField("HK №2")
+    happinesThree = models.FloatField("HK №3")
+    happinesFour = models.FloatField("HK №4")
+    happinesFive = models.FloatField("HK №5")
