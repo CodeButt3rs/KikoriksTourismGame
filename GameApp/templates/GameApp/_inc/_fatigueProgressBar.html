@@ -1,0 +1,21 @@
+{% if percents > 70 %}
+<div class="progress">
+    <div class="progress-bar bg-danger" role="progressbar" style="width: {{percents}}%;" aria-valuenow="{{percents}}" aria-valuemin="0" aria-valuemax="100">{{percents}}%</div>
+</div>
+{% elif percents >= 50 and percents < 70 %}
+<div class="progress">
+    <div class="progress-bar bg-warning" role="progressbar" style="width: {{percents}}%;" aria-valuenow="{{percents}}" aria-valuemin="0" aria-valuemax="100">{{percents}}%</div>
+</div>
+{% elif percents < 50 and percents > 30 %}
+<div class="progress">
+    <div class="progress-bar bg-info" role="progressbar" style="width: {{percents}}%;" aria-valuenow="{{percents}}" aria-valuemin="0" aria-valuemax="100">{{percents}}%</div>
+</div>
+{% elif percents <= 30 and percents > 0 %}
+<div class="progress">
+    <div class="progress-bar bg-success" role="progressbar" style="width: {{percents}}%;" aria-valuenow="{{percents}}" aria-valuemin="0" aria-valuemax="100">{{percents}}%</div>
+</div>
+{% elif percents == 0%}
+<div class="progress">
+    <div class="progress-bar bg-success" role="progressbar" style="width: 3%;" aria-valuenow="{{percents}}" aria-valuemin="0" aria-valuemax="100">{{percents}}%</div>
+</div>
+{% endif %}
