@@ -1,7 +1,7 @@
 # import ...
 # from ... import ...
 from django.urls import path, include
-from .views import baseTemplate, gamePage, indexPage, loginView, logoutView
+from .views import baseTemplate, gamePage, indexPage, loginView, logoutView, adminPage
 
 urlpatterns = [
     path('base', baseTemplate, name='GameAppBase'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('game', gamePage, name = "GameAppGame"),
     path('login', loginView, name = "GameAppLogin"),
     path('logout', logoutView, name = "GameAppLogout"),
+    path('adminpanel', adminPage, name="GameAppAdmin")
 ]
