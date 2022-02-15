@@ -2,14 +2,14 @@
 
 # from ... import ..
 from django.contrib import admin
-from .models import Kikorik, Attractions, GameCycle
+from .models import Kikorik, Attractions, GameCycle, MakeTurn, MadeTurn
 # Register your models here.
 
 class KikorikAdmin(admin.ModelAdmin):
     list_display = ['name', 'user', 'happinesK', 'recreationK', 'healthK', 'cultureK', 'sportK', 'eventsK', 'fatigue']
 
 class AttractionsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'gameDay', 'recreationK', 'healthK', 'cultureK', 'sportK', 'eventsK', 'fatigue']
+    list_display = ['name', 'gameDay', 'isForRelax', 'recreationK', 'healthK', 'cultureK', 'sportK', 'eventsK', 'fatigue']
 
 class GameCycleAdmin(admin.ModelAdmin):
     list_display = ['name', 'gameDays', 'currentGameDay', 'get_amount_of_kikoriks', 'gameDate']
@@ -22,3 +22,5 @@ class GameCycleAdmin(admin.ModelAdmin):
 admin.site.register(Kikorik, KikorikAdmin)
 admin.site.register(Attractions, AttractionsAdmin)
 admin.site.register(GameCycle, GameCycleAdmin)
+admin.site.register(MakeTurn)
+admin.site.register(MadeTurn)
