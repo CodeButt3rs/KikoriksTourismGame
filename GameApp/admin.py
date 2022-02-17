@@ -6,10 +6,10 @@ from .models import Kikorik, Attractions, GameCycle, MakeTurn, MadeTurn
 # Register your models here.
 
 class KikorikAdmin(admin.ModelAdmin):
-    list_display = ['name', 'user', 'happinesK', 'recreationK', 'healthK', 'cultureK', 'sportK', 'eventsK', 'fatigue']
+    list_display = ['name', 'user', 'happinesK', 'recreationK', 'healthK', 'cultureK', 'sportK', 'eventsK', 'ecoK', 'fatigue']
 
 class AttractionsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'gameDay', 'isForRelax', 'recreationK', 'healthK', 'cultureK', 'sportK', 'eventsK', 'fatigue']
+    list_display = ['name', 'gameDay', 'isForRelax', 'recreationK', 'healthK', 'cultureK', 'sportK', 'eventsK', 'ecoK','fatigue']
 
 class GameCycleAdmin(admin.ModelAdmin):
     list_display = ['name', 'gameDays', 'currentGameDay', 'get_amount_of_kikoriks', 'gameDate']
