@@ -1,0 +1,32 @@
+<div class="card col-lg-4 col-md-12 col-sm-12 sm-12" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Управление игрой</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Кнопки для управления игрой</h6>
+      <p class="card-text">Самые нужные кнопки на свете.</p>
+      {% if cycle.isActive == False and cycle.isEnded != True %}
+      <a href="{% url 'GameAppStartGame' %}" class="btn btn-success mb-1 d-flex">Начать игру</a>
+      {% endif %}
+      {% if cycle.isPaused %}
+      <a href="{% url 'GameAppPause' %}" class="btn btn-warning d-flex">Продолжить игру</a>
+      {% elif cycle.isEnded or cycle.isActive == False %}
+      <a href="{% url 'GameAppPause' %}" class="btn btn-primary d-flex disabled">Поставить игру на паузу</a>
+      {% else %}
+      <a href="{% url 'GameAppPause' %}" class="btn btn-primary d-flex">Поставить игру на паузу</a>
+      {% endif %}
+      {% if cycle.isPaused and cycle.gameDays != cycle.currentGameDay%}
+      <a href="{% url 'GameAppNextDay' %}" class="btn btn-success mt-1 d-flex">Следующий день</a>
+      {% else %}
+      <a href="#" class="btn btn-warning mt-1 disabled d-flex">Следующий день</a>
+      {% endif %}
+      {% if cycle.gameDays != cycle.currentGameDay or cycle.isPaused == False%}
+      <a href="#" class="btn btn-danger mt-1 d-flex disabled">Завершить игру</a>
+      {% else %}
+      <a href="{% url 'GameAppEndGame' %}" class="btn btn-success mt-1 d-flex">Завершить игру</a>
+      {% endif %}
+      {% if cycle.isPaused and cycle.gameDays != cycle.currentGameDay%}
+      <a href="{% url 'GameAppCalculateGame' %}" class="btn btn-success mt-1 d-flex">Вычисления</a>
+      {% else %}
+      <a href="#" class="btn btn-warning mt-1 disabled d-flex">Вычисления</a>
+      {% endif %}
+    </div>
+  </div>
