@@ -1,10 +1,12 @@
-from django.forms import ValidationError
 from django import forms
 from .models import Attractions, MakeTurn, GameCycle
 
 class MakeTurnForm(forms.ModelForm):
 
-    currentDay = GameCycle.objects.filter(isActive = True)[0].currentGameDay
+    try:
+        currentDay = GameCycle.objects.filter(isActive = True).last().currentGameDay
+    except:
+        currentDay = 1
     attractionsList = Attractions.objects.filter(gameDay = currentDay)
 
     attractionOne = forms.ModelChoiceField(
