@@ -1,0 +1,50 @@
+{% if isEmpty %}
+<h3>Статистики ещё нет! Возможно, игра только началась, или вы ещё не делали ходов</h3>
+{% else %}
+<div>
+<canvas id="kikorikUsersStats_{{kikorikpk}}"></canvas>
+</div>
+  
+
+{% autoescape off %}
+<script>
+const data_{{kikorikpk}} = {
+  labels: {{names}},
+  datasets: [
+    {
+      label: 'Счастье',
+      data: {{happines}},
+      backgroundColor: 'rgb(65,105,225)',
+    },
+    {
+      label: 'Усталость',
+      data: {{fatigue}},
+      backgroundColor: 'rgb(255,69,0)',
+    }
+  ]
+};
+
+const config_{{kikorikpk}} = {
+  type: 'line',
+  data: data_{{kikorikpk}},
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Статистика смешарика - {{kikorikname}}'
+      }
+    }
+  },
+};
+
+const myChart_{{kikorikpk}} = new Chart(
+    document.getElementById('kikorikUsersStats_{{kikorikpk}}'),
+    config_{{kikorikpk}}
+  );
+</script>
+{% endautoescape %}
+{% endif %}

@@ -1,0 +1,59 @@
+
+<div>
+  <canvas id="kikoriksInGameStats"></canvas>
+</div>
+
+{% block scripts %}
+{% autoescape off %}
+<script>
+const data = {
+  labels: {{names}},
+  datasets: [
+    {
+      label: 'Счастье',
+      data: {{happines}},
+      backgroundColor: 'rgb(65,105,225)',
+      stack: 'Stack 0',
+    },
+    {
+      label: 'Усталость',
+      data: {{fatigue}},
+      backgroundColor: 'rgb(255,69,0)',
+      stack: 'Stack 1',
+    }
+  ]
+};
+
+const config = {
+  type: 'bar',
+  data: data,
+  options: {
+    plugins: {
+      title: {
+        display: true,
+        text: 'Общеигровая статистика'
+      },
+    },
+    responsive: true,
+    interaction: {
+      intersect: false,
+    },
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true
+      }
+    }
+  }
+};
+
+const myChart = new Chart(
+    document.getElementById('kikoriksInGameStats'),
+    config
+  );
+</script>
+{% endautoescape %}
+{% endblock scripts %}
+
