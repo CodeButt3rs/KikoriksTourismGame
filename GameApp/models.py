@@ -39,6 +39,16 @@ class Kikorik(models.Model):
         k = abs(self.recreationK) + abs(self.healthK) + abs(self.cultureK) + abs(self.sportK) + abs(self.eventsK) + abs(self.ecoK)
         if k > 2.5:
             return ValidationError("Значение вышло за пределы коэффициента Кати Кадочкиной")
+        # Защита от дурака "Счастье"
+        if self.happinesK > 1:
+            self.happinesK = 1
+        elif self.happinesK < 0:
+            self.happinesK = 0
+        # Защита от дурака "Усталость"
+        if self.fatigue > 0.7:
+            self.fatigue = 0.7
+        elif self.fatigue < -0.3:
+            self.fatigue = -0.3
         return super(Kikorik, self).save(*args, **kwargs)
 
 class Attractions(models.Model):
@@ -71,7 +81,7 @@ class Attractions(models.Model):
             return ValidationError
         self.fatigue = round(0.30 * (k/2.5), 2)
         if self.isForRelax:
-            self.fatigue = round(-1.75 * self.fatigue, 2)
+            self.fatigue = round(-1.5 * self.fatigue, 2)
         return super(Attractions, self).save(*args, **kwargs)
 
 class GameCycle(models.Model):
@@ -121,7 +131,14 @@ class MakeTurn(models.Model):
         string = f"Ход №{self.gameDay} игрока {self.user}"
         return string
     
-class MadeTurn(MakeTurn):
+class MadeTurn(models.Model):
+    user = models.ForeignKey(User, blank=True, on_delete=models.CASCADE, null=True)
+    gameDay = models.IntegerField("Игровой день", blank=True, null=True)
+    attractionOne = models.ForeignKey(Attractions, verbose_name="Достопримечательность №1", related_name="AttractionOne1", on_delete=models.CASCADE, null=True)
+    attractionTwo = models.ForeignKey(Attractions, verbose_name="Достопримечательность №2", related_name="AttractionTwo2", on_delete=models.CASCADE, null=True)
+    attractionThree = models.ForeignKey(Attractions, verbose_name="Достопримечательность №3", related_name="AttractionThree3", on_delete=models.CASCADE, null=True)
+    attractionFour = models.ForeignKey(Attractions, verbose_name="Достопримечательность №4", related_name="AttractionFour4", on_delete=models.CASCADE, null=True)
+    attractionFive = models.ForeignKey(Attractions, verbose_name="Достопримечательность №5", related_name="AttractionFive5", on_delete=models.CASCADE, null=True)
     fatigueOne = models.FloatField("Усталость №1")
     fatigueTwo = models.FloatField("Усталость №2")
     fatigueThree = models.FloatField("Усталость №3")
@@ -132,3 +149,7 @@ class MadeTurn(MakeTurn):
     happinesThree = models.FloatField("HK №3")
     happinesFour = models.FloatField("HK №4")
     happinesFive = models.FloatField("HK №5")
+
+    def __str__(self):
+        s = f"Результаты хода №{self.gameDay} игрока {self.user}"
+        return s
