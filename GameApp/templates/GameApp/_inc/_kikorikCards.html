@@ -53,12 +53,12 @@
       <div class="d-flex justify-content-center text-center">
         <h5>Игровой день {{currentGameCycle.currentGameDay}} из {{currentGameCycle.gameDays}}</h5>
       </div>
-      <div class="d-flex justify-content-center text-center">
+      {% comment %} <div class="d-flex justify-content-center text-center">
         <p class="card-text">Игровые условия на день</p>
       </div>
       <div class="d-flex justify-content-center text-center">
         <h5>На улице жара - усталость прибавляется на 30% больше</h5>
-      </div>
+      </div> {% endcomment %}
       <div class="d-flex justify-content-center text-center">
         <p class="card-text">Уровень счастья смешарика</p>
       </div>
@@ -74,8 +74,8 @@
         {% else %}
         <form action="{% url 'GameAppGame' %}" method="post">
           {% csrf_token %}
-         {{attractionsForm}}
-         <div class="d-flex justify-content-center text-center">
+          {{attractionsForm}}
+          <div class="d-flex justify-content-center text-center">
           <button type="submit" class="btn btn-primary mt-3">Отправить результат</button>
          </div>
         </form>
