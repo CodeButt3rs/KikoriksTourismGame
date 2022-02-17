@@ -1,0 +1,76 @@
+{% extends 'GameApp/base.html' %}
+{% load GameApp_GameTags %}
+{% block title %}Admin-панель{% endblock title %}
+{% block content %}
+<div class="pt-3">
+  <h1>{{cycle.name}} | {{cycle.gameDate}}</h1>
+  <div class="pt-3">
+    <div class="row">
+      <div class="col-lg-4 col-md-4 col-sm-12">
+        <h3>Статус игры</h3>
+        {% if cycle.isPaused and cycle.isActive %}
+        <h6>На паузе</h6>
+        {% elif cycle.isEnded %}
+        <h6>Игра завершена</h6>
+        {% elif cycle.isActive %}
+        <h6>Игра идёт</h6>
+        {% else %}
+        <h6>Игра не идёт</h6>
+        {% endif %}
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12">
+        <h3>Игровой день</h3>
+        <h6>{{cycle.currentGameDay}}</h6>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12">
+        <h3>Всего дней</h3>
+        <h6>{{cycle.gameDays}}</h6>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card col-lg-4 col-md-12 col-sm-12 sm-12">
+      <div class="card-body">
+        <h5 class="card-title">Управление игрой</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Кнопки для управления игрой</h6>
+        <p class="card-text">Самые нужные кнопки на свете.</p>
+        {% if cycle.isActive == False and cycle.isEnded != True %}
+        <a href="{% url 'GameAppStartGame' %}" class="btn btn-success mb-1 d-flex">Начать игру</a>
+        {% endif %}
+        {% if cycle.isPaused %}
+        <a href="{% url 'GameAppPause' %}" class="btn btn-warning d-flex">Продолжить игру</a>
+        {% elif cycle.isEnded or cycle.isActive == False %}
+        <a href="{% url 'GameAppPause' %}" class="btn btn-primary d-flex disabled">Поставить игру на паузу</a>
+        {% else %}
+        <a href="{% url 'GameAppPause' %}" class="btn btn-primary d-flex">Поставить игру на паузу</a>
+        {% endif %}
+        {% if cycle.isPaused and cycle.gameDays != cycle.currentGameDay%}
+        <a href="{% url 'GameAppNextDay' %}" class="btn btn-success mt-1 d-flex">Следующий день</a>
+        {% else %}
+        <a href="#" class="btn btn-warning mt-1 disabled d-flex">Следующий день</a>
+        {% endif %}
+        {% if cycle.gameDays != cycle.currentGameDay or cycle.isPaused == False%}
+        <a href="#" class="btn btn-danger mt-1 d-flex disabled">Завершить игру</a>
+        {% else %}
+        <a href="{% url 'GameAppEndGame' %}" class="btn btn-success mt-1 d-flex">Завершить игру</a>
+        {% endif %}
+        {% if cycle.isPaused and cycle.gameDays != cycle.currentGameDay%}
+        <a href="{% url 'GameAppCalculateGame' %}" class="btn btn-success mt-1 d-flex">Вычисления</a>
+        {% else %}
+        <a href="#" class="btn btn-warning mt-1 disabled d-flex">Вычисления</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="mt-md-3 mt-sm-3 col-lg-8 col-md-12 col-sm-12 sm-12">
+        {% getKikoriksAdminStats kikoriks %}
+    </div>
+  </div>
+  <div class="row">
+    {% for i in kikoriks %}
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      {% getKikoriksUsersStats i %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}
